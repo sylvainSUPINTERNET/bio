@@ -25,8 +25,8 @@ public class SubGender {
     @Property("description")
 	public String description;
 
-    @Relationship(type = "INCLUDE", direction = Direction.INCOMING)
-	private Set<Gender> genders = new HashSet<>();
+    // @Relationship(type = "SUBGENDER_OF", direction = Direction.OUTGOING)
+	// private Set<Gender> genders = new HashSet<>();
 
 
     public SubGender(String displayName, String description) {
@@ -42,7 +42,7 @@ public class SubGender {
         return this.displayName;
     }
 
-    public Set<Gender> getGenders() {
-		return this.genders;
-	}
+    // public Set<Gender> getGenders() {
+	// 	return this.genders;
+	// }
 }

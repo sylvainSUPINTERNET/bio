@@ -7,6 +7,9 @@ import com.ideas.finder.nodes.subGender.SubGender;
 
 import org.springframework.data.neo4j.core.schema.Relationship;
 import org.springframework.data.neo4j.core.schema.Relationship.Direction;
+
+import reactor.core.publisher.Flux;
+
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -32,7 +35,7 @@ public class Gender {
 	/**
 	 * Reptile, Mamals ...
 	 */
-	@Relationship(type = "INCLUDES", direction = Direction.OUTGOING)
+	@Relationship(type = "GENDER_OF", direction = Direction.INCOMING)
 	private Set<SubGender> subGender = new HashSet<>();
 
 	// @Relationship(type = "DIRECTED", direction = INCOMING)
@@ -53,6 +56,10 @@ public class Gender {
 
 	public void addSubGender(SubGender subGender) {
 		this.subGender.add(subGender);
+	}
+
+	public Set<SubGender> setSubGenders(Set<SubGender> sb) {
+		return this.subGender = sb;
 	}
 
 	public String getDescription() {
