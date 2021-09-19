@@ -33,6 +33,15 @@ public class GenderController {
 	}
 
     
+    /**
+     * http://localhost:8080/genders/init/genders
+     * http://localhost:8080/genders/init/subgenders/vertebrate
+     * 
+MATCH (n) RETURN n LIMIT 25
+     * 
+     * MATCH (n) DETACH DELETE n
+     * @return
+     */
 
 
     @GetMapping(value = { "", "/" }, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -59,20 +68,16 @@ public class GenderController {
             
             return this.subGenderRepository
                 .findAll()
-                .log()
                 .switchIfEmpty(this.subGenderRepository.saveAll(subGendersVertebrate))
-                .log()
                 .thenMany(this.genderRepository.findAll())
-                .log()
-                .filter( gender1 -> gender1.getSubGenders().size() == 0 && gender1.getDisplayName().equals(Constants.VERTEBRATE))
+                .filter( gender1 -> gender1.getDisplayName().equals(Constants.VERTEBRATE))
                 .log()
                 .flatMap( gender2 -> {
-                        this.genderRepository.findById(gender2.getId()).log().flatMapMany( g -> {
-                            g.setSubGenders(subGendersVertebrate);
-                            return this.genderRepository.save(g);
-                        });
-                    return this.subGenderRepository.findAll();
-                });
+                    // System.out.println(gender2.getDisplayName());
+                    gender2.setSubGenders(subGendersVertebrate);
+                    return this.genderRepository.save(gender2);
+                })
+                .flatMap(ge -> this.genderRepository.findAll());
                 // .flatMap( c -> {
                 //     return Mono.just("yikes");
                 // })
